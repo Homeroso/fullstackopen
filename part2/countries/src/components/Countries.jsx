@@ -20,24 +20,25 @@ const Countries = ({ filter, showAll, setFilter }) => {
         ? countries
         : countries.filter(country => country.search(filter) > -1)
     
-    useEffect(() => {
+    if(countries.length === 0) return <div>Loading...</div>
+    
+    const getOneCountry = name => {
         countryService
-            .getCountry(filter)
+            .getCountry(name)
             .then(data => {
                 setData(data)
             })
-    }, [update])
+    }
 
     const handleShow = name => {
         setFilter(name)
         setUpdate(!update)
     }
 
-    if(countries.length === 0) return <div>Loading...</div>
-
     if(countriesToShow.length > 10) return <div>Too many matches, specify another filter</div>
 
     if(countriesToShow.length === 1) {
+        getOneCountry(countriesToShow[0])
         return <Country country = {countriesToShow[0]} data = {data} />
     }
 
