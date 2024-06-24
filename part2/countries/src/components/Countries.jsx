@@ -4,9 +4,12 @@ import Country from './Country'
 
 const Countries = ({ filter, showAll, setFilter }) => {
 
-    const [countries, setCountries] = useState([])
+    const [countries, setCountries] = useState([''])
     const [data, setData] = useState(null)
-    const [update, setUpdate] = useState(false)
+
+    const countriesToShow = showAll
+        ? countries
+        : countries.filter(country => country.search(filter) > -1)
 
     useEffect(() => {
         countryService
@@ -16,34 +19,33 @@ const Countries = ({ filter, showAll, setFilter }) => {
             })
     }, [])
 
-    const countriesToShow = showAll
-        ? countries
-        : countries.filter(country => country.search(filter) > -1)
-    
-    if(countries.length === 0) return <div>Loading...</div>
-    
-    const getOneCountry = name => {
+    useEffect(() => {
+        if(countriesToShow.length === 0) countriesToShow.push('Finland')
         countryService
-            .getCountry(name)
+            .getCountry(filter)
             .then(data => {
                 setData(data)
             })
-    }
+            .catch(error => {
+                console.log('no data')
+            })
+    }, [filter])
 
     const handleShow = name => {
         setFilter(name)
-        setUpdate(!update)
-    }
+    }    
+    
+    if(countries.length === 0) return <div>Loading...</div>
 
     if(countriesToShow.length > 10) return <div>Too many matches, specify another filter</div>
 
+    if(countriesToShow.length === 0) return <div>No matches</div>
+
     if(countriesToShow.length === 1) {
-        getOneCountry(countriesToShow[0])
-        return <Country country = {countriesToShow[0]} data = {data} />
+        return <Country country = {filter} data = {data} />
     }
-
-
-    return (
+    
+    if(countriesToShow.length > 1 && countriesToShow.length <= 10) return (
         <div>
             {countriesToShow.map(country => 
                 <div>
@@ -57,6 +59,9 @@ const Countries = ({ filter, showAll, setFilter }) => {
             )}
         </div>
     )
+
+    
+
 }
 
 export default Countries
