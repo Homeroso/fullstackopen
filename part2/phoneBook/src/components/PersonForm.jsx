@@ -11,7 +11,7 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
         //Create a new person object
         const personObj = {
           name: newName,
-          phone: newPhone
+          number: newPhone
         }
     
         //Check if the name is already in the phonebook
@@ -49,12 +49,21 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
               .create(personObj)
               .then(returnedPerson => {
                 setPersons(persons.concat(returnedPerson))
-              })  
-            setMessage({
-              class: 'success',
-              text:`Added ${newName} to the phonebook`})
-            setNewName('')
-            setNewPhone('')
+                setMessage({
+                  class: 'success',
+                  text:`Added ${newName} to the phonebook`})
+                setNewName('')
+                setNewPhone('')
+              })
+              .catch(error => {
+                console.log(error.response.data.error)
+                setMessage({
+                  class: 'error',
+                  text: error.response.data.error
+                })
+              }
+              )
+            
         }
     }
 

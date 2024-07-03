@@ -1,7 +1,7 @@
 import Person from './Person'
 import personService from '../services/persons'
 
-const Persons = ({ persons, filter, showAll }) => {
+const Persons = ({ persons, setPersons, filter, showAll }) => {
 
     //filter the notebook
     const personsToShow = showAll
@@ -14,7 +14,9 @@ const Persons = ({ persons, filter, showAll }) => {
             .deletePerson(id)
             .then(() => {
                 console.log('Delete successful')
+                window.location.reload(false);
             })
+            
     }
     
 
@@ -24,7 +26,7 @@ const Persons = ({ persons, filter, showAll }) => {
                 <Person 
                     key = {person.name} 
                     name = {person.name} 
-                    phone = {person.phone} 
+                    phone = {person.number} 
                     handleDelete = {() => handleDelete(person.id)}
             />)}
         </ul>

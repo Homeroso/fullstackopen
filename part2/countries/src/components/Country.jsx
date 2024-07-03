@@ -39,7 +39,7 @@ const Country = ({ country, data}) => {
                 <h3>Flag</h3>
                 <img src={data.flags.png} alt={data.flags.alt} width='200'/>
                 <h3>Weather in {data.capital}</h3>
-                <p>Temperature: {weather.current.temp_c}° Celcius</p> */
+                <p>Temperature: {weather.current.temp_c}° Celcius</p>
             </div>
                 
         </div>
